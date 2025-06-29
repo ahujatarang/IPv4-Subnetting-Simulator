@@ -30,13 +30,13 @@ This web-based simulator guides users through the process of IPv4 subnetting. It
 
 ## 🧾 Code Snippets
 
-Due to copyright restrictions, the complete project code is not publicly available.
+Due to copyright constraints and academic policy, the complete project codebase is not publicly available.
 
-However, representative code snippets such as:
-- `simulation_views.py` – Handles IP logic  
-- `sim1.html` – Main simulation form  
-- `mainpage.html` – Landing page  
-are included in the `Code Snippets/` folder.
+However, the repository includes representative and functional core components that demonstrate the project logic and simulation flow:
+- `views.py` – Handles backend logic for generating random IPs, subnetting calculations, and rendering results
+- `ip-addressing.py` – Core class to determine IP class, subnet count, host count, and subnet mask
+- `sim1.html` – Main simulation interface allowing user interaction and validation logic (HTML + JS)
+These files are available under the Code Snippets/ folder to give a clear understanding of how the application works.
 
 ---
 
