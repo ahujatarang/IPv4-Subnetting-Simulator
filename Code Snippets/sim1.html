@@ -1,0 +1,160 @@
+{# 
+  sim1.html – Interactive subnetting simulation interface
+  Displays generated IP address and form for class, subnet, mask, etc.
+  Built with Django templating, JS, and Bootstrap.
+#}
+
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<div id="Container">
+  <input type="button" id="drpdwnbtn" value="INSTRUCTIONS" onclick="dropdown()">
+  <div id="myDropdown" class="dropdown-content show">
+    <a id="close">
+      <button id="btn" onclick="closes()"><i class="fa fa-close"></i></button>
+    </a>
+    <a>
+      <br>
+      <b>1) Carefully observe the given IP address and select the correct class from the dropdown menu.</b><br><br>
+      <b>2) Based on the class, answer the questions for Subnets, Hosts per subnet and Subnet Mask using the correct formulas.</b><br><br>
+      <b>3) Use the dropdown to answer whether the second IP belongs to the same network.</b><br><br>
+      <b>4) Click "Check" to evaluate your answers.</b><br><br>
+    </a>
+  </div>
+
+  <div id="ip">
+    <img src="{% static 'img/sim/computer.jpg' %}" alt="Logo" width="170px"/>
+    <strong>IP-Address: {{ ip }}</strong>
+  </div>
+
+  <div id="class">
+    <p><strong>Class</strong><br>
+      <select id="divclass">
+        <option value="">Default</option>
+        <option value="Class A">A</option>
+        <option value="Class B">B</option>
+        <option value="Class C">C</option>
+        <option value="Class D">D</option>
+      </select>
+    </p>
+  </div>
+
+  <div id="subnet">
+    <p><strong>Number of Subnets</strong><br>
+      <input type="text" id="divsubnet">
+    </p>
+  </div>
+
+  <div id="host">
+    <p><strong>Hosts per Subnet</strong><br>
+      <input type="text" id="divhost">
+    </p>
+  </div>
+
+  <div id="mask">
+    <p><strong>Subnet Mask</strong><br>
+      <input type="text" id="divmask">
+    </p>
+  </div>
+
+  <div id="compare">
+    <p><strong>Does {{ ipx }} belong to the same network?</strong><br>
+      <select id="divcompare">
+        <option value="">Default</option>
+        <option value="YES">YES</option>
+        <option value="NO">NO</option>
+      </select>
+    </p>
+  </div>
+
+  <input type="button" id="check" value="Check" onclick="check()">
+  <input type="button" id="reset" value="Reset" onclick="window.location.reload()">
+
+  <div id="table">
+    <div id="truthtable">
+      <p style="padding-top: 10px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Truth Table</p>
+      <input type="button" id="print" value="Print" onclick="window.print()">
+    </div>
+    <div id="table1">
+      <table id="mytable" width="550" border="1" style="text-align:center">
+        <tbody>
+          <tr>
+            <th>Serial No.</th>
+            <th>Class</th>
+            <th>Subnet</th>
+            <th>Host</th>
+            <th>Subnet Mask</th>
+            <th>IP in same network</th>
+            <th>Remarks</th>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<script>
+  var n = 1;
+  var remark;
+
+  function check() {
+    var class1 = document.getElementById("divclass").value;
+    var subnet = document.getElementById("divsubnet").value;
+    var host = document.getElementById("divhost").value;
+    var mask = document.getElementById("divmask").value;
+    var compare = document.getElementById("divcompare").value;
+
+    if (class1 === "{{ class|escapejs }}" &&
+        subnet === "{{ subnet|escapejs }}" &&
+        host === "{{ host|escapejs }}" &&
+        mask === "{{ mask|escapejs }}" &&
+        compare === "{{ compare|escapejs }}") {
+      remark = "Correct";
+    } else {
+      remark = "Incorrect";
+    }
+
+    var table = document.getElementById("mytable");
+    var row = table.insertRow(-1);
+    var cell1 = row.insertCell(0);
+    var cell2 = row.insertCell(1);
+    var cell3 = row.insertCell(2);
+    var cell4 = row.insertCell(3);
+    var cell5 = row.insertCell(4);
+    var cell6 = row.insertCell(5);
+    var cell7 = row.insertCell(6);
+
+    cell1.innerHTML = n++;
+    cell2.innerHTML = class1;
+    cell3.innerHTML = subnet;
+    cell4.innerHTML = host;
+    cell5.innerHTML = mask;
+    cell6.innerHTML = compare;
+    cell7.innerHTML = remark;
+
+    // Highlight correct values in green, incorrect in red
+    cell2.style.backgroundColor = (class1 === "{{ class|escapejs }}") ? "rgb(66, 238, 66)" : "Red";
+    cell3.style.backgroundColor = (subnet === "{{ subnet|escapejs }}") ? "rgb(66, 238, 66)" : "Red";
+    cell4.style.backgroundColor = (host === "{{ host|escapejs }}") ? "rgb(66, 238, 66)" : "Red";
+    cell5.style.backgroundColor = (mask === "{{ mask|escapejs }}") ? "rgb(66, 238, 66)" : "Red";
+    cell6.style.backgroundColor = (compare === "{{ compare|escapejs }}") ? "rgb(66, 238, 66)" : "Red";
+    cell7.style.backgroundColor = (remark === "Correct") ? "rgb(66, 238, 66)" : "Red";
+  }
+
+  var d = 0;
+  function dropdown() {
+    const dropdown = document.getElementById("myDropdown");
+    dropdown.style.display = (d === 0) ? "block" : "none";
+    d = 1 - d;
+  }
+
+  function closes() {
+    if (d === 1) {
+      document.getElementById("myDropdown").style.display = "none";
+      d = 0;
+    }
+  }
+</script>
+
+{% endblock content %}
